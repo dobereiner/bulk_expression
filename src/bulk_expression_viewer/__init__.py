@@ -18,6 +18,7 @@ from .plotting import (
 
 __all__ = [
     "get_scale_matrix",
+    "launch_colab_viewer",
     "load_project_data",
     "matrix_to_long",
     "parse_gene_input",
@@ -31,3 +32,9 @@ __all__ = [
     "setup_plot_style",
     "summarize_selection",
 ]
+
+
+def launch_colab_viewer(*args, **kwargs):
+    from .colab_app import launch_colab_viewer as _launch_colab_viewer
+
+    return _launch_colab_viewer(*args, **kwargs)

@@ -20,7 +20,9 @@ The project separates two concerns:
 - `src/bulk_expression_viewer/`
   Python helpers for loading data and drawing plots.
 - `notebooks/bulk_expression_viewer_colab.ipynb`
-  Main Colab notebook for colleagues.
+  Technical Colab notebook with inline controls.
+- `notebooks/bulk_expression_colab_app.ipynb`
+  Colleague-facing Colab app notebook with a cleaner launch flow.
 - `requirements.txt`
   Python dependencies for Colab or local notebook runs.
 
@@ -64,9 +66,9 @@ The script:
 ## Google Colab workflow
 
 1. Open the repository in Colab.
-2. Open `notebooks/bulk_expression_viewer_colab.ipynb`.
-3. Run the install cell: `%pip install -q -r requirements.txt`
-4. Run the rest of the notebook.
+2. Prefer opening `notebooks/bulk_expression_colab_app.ipynb` for colleagues.
+3. Run the setup form cell.
+4. Run the launch form cell.
 
 The notebook supports:
 
