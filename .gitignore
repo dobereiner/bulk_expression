@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.venv/
+venv/
+data/exports/
+data/raw/
+
+# R
+.Rhistory
+.RData
+.Rproj.user/
+
+# OS / editors
+.DS_Store
+Thumbs.db
