@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import Iterable
 
 import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
 import seaborn as sns
 
@@ -28,6 +29,12 @@ def _palette(categories: Iterable[str]) -> list[str]:
     unique_count = len(pd.Index(categories).unique())
     palette = sns.color_palette("Spectral", n_colors=max(unique_count, 1))
     return palette
+
+
+def _sample_labels(metadata: pd.DataFrame) -> list[str]:
+    duplicate_name_mask = metadata["sample_name"].duplicated(keep=False)
+    labels = metadata["sample_name"].where(~duplicate_name_mask, metadata["display_name"])
+    return labels.astype(str).tolist()
 
 
 def plot_gene_barplot(long_df: pd.DataFrame, scale_label: str) -> plt.Figure:
@@ -91,13 +98,14 @@ def plot_multi_gene_heatmap(matrix_subset: pd.DataFrame, metadata: pd.DataFrame,
     ordered_meta = metadata.sort_values(["project_group", "line", "passage", "sample_id"]).copy()
     ordered_cols = ordered_meta["sample_key"].tolist()
     ordered_matrix = matrix_subset.loc[:, ordered_cols].copy()
+    sample_labels = _sample_labels(ordered_meta)
 
     fig_width = max(12, min(24, len(ordered_cols) * 0.35))
     fig_height = max(4, min(14, ordered_matrix.shape[0] * 0.55))
     fig, ax = plt.subplots(figsize=(fig_width, fig_height))
     sns.heatmap(
         ordered_matrix,
-        cmap="mako",
+        cmap="bwr",
         linewidths=0.4,
         linecolor="#EFEAE0",
         cbar_kws={"label": scale_label},
@@ -106,7 +114,10 @@ def plot_multi_gene_heatmap(matrix_subset: pd.DataFrame, metadata: pd.DataFrame,
     ax.set_title("Expression heatmap", loc="left", pad=16, fontsize=20, fontweight="bold")
     ax.set_xlabel("Samples")
     ax.set_ylabel("Genes")
-    ax.set_xticklabels(ordered_meta["display_name"], rotation=75, ha="right", fontsize=9)
+    ax.set_xticks(np.arange(ordered_matrix.shape[1]) + 0.5)
+    ax.set_xticklabels(sample_labels, rotation=45, ha="right", fontsize=9)
+    ax.set_yticks(np.arange(ordered_matrix.shape[0]) + 0.5)
+    ax.set_yticklabels(ordered_matrix.index.tolist(), rotation=0, va="center", fontsize=10)
     fig.tight_layout()
     return fig
 
@@ -127,7 +138,7 @@ def plot_aggregated_heatmap(long_df: pd.DataFrame, group_by: str, agg_func: str,
     fig, ax = plt.subplots(figsize=(fig_width, fig_height))
     sns.heatmap(
         grouped,
-        cmap="rocket",
+        cmap="bwr",
         linewidths=0.5,
         linecolor="#EFEAE0",
         cbar_kws={"label": f"{agg_func} {scale_label}"},
@@ -136,6 +147,9 @@ def plot_aggregated_heatmap(long_df: pd.DataFrame, group_by: str, agg_func: str,
     ax.set_title(f"Aggregated expression by {group_by}", loc="left", pad=16, fontsize=20, fontweight="bold")
     ax.set_xlabel(group_by)
     ax.set_ylabel("Genes")
-    ax.tick_params(axis="x", rotation=45)
+    ax.set_xticks(np.arange(grouped.shape[1]) + 0.5)
+    ax.set_xticklabels(grouped.columns.astype(str).tolist(), rotation=45, ha="right")
+    ax.set_yticks(np.arange(grouped.shape[0]) + 0.5)
+    ax.set_yticklabels(grouped.index.tolist(), rotation=0, va="center")
     fig.tight_layout()
     return fig
