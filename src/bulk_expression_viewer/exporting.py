@@ -38,6 +38,6 @@ def export_render_bundle(
     for figure_name, figure in figures.items():
         if figure is None:
             continue
-        figure.savefig(bundle_dir / f"{_safe_slug([figure_name])}.png", dpi=200, bbox_inches="tight")
+        figure.savefig(bundle_dir / f"{_safe_slug([figure_name])}.png", dpi=320, bbox_inches="tight")
 
     return bundle_dir
