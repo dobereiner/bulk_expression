@@ -52,7 +52,7 @@ def parse_gene_input(raw_text: str) -> list[str]:
         return []
 
     tokens = (
-        pd.Series(raw_text.replace("\n", ",").split(","))
+        pd.Series(raw_text.replace("\n", " ").split(" "))
         .astype(str)
         .str.strip()
         .replace("", pd.NA)
@@ -68,7 +68,7 @@ def parse_sample_input(raw_text: str, available_sample_ids: Iterable[int]) -> li
         return [str(sample_id) for sample_id in sorted(available)]
 
     tokens = (
-        pd.Series(raw_text.replace("\n", ",").split(","))
+        pd.Series(raw_text.replace("\n", " ").split(" "))
         .astype(str)
         .str.strip()
         .replace("", pd.NA)
