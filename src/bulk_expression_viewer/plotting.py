@@ -73,7 +73,7 @@ def _prepare_heatmap_frame(
     if normalized_transform == "quantile_clip":
         lower, upper = _clip_bounds(numeric_frame.to_numpy(), clip_quantile)
         clipped = numeric_frame.clip(lower=lower, upper=upper, axis=None)
-        label = f"{scale_label} (q{int(round(clip_quantile * 100))} clipped)"
+        label = f"{scale_label} (q{int(round(clip_quantile * 100))})"
         return clipped, label, {"vmin": lower, "vmax": upper}
 
     if normalized_transform == "row_zscore":
@@ -84,7 +84,7 @@ def _prepare_heatmap_frame(
         if not np.isfinite(bound) or bound == 0:
             bound = 1.0
         z_frame = z_frame.clip(lower=-bound, upper=bound, axis=None)
-        label = f"{scale_label} row z-score (q{int(round(clip_quantile * 100))})"
+        label = f"{scale_label} z-score (q{int(round(clip_quantile * 100))})"
         return z_frame, label, {"center": 0.0, "vmin": -bound, "vmax": bound}
 
     raise ValueError(f"Unsupported heatmap transform: {transform}")
